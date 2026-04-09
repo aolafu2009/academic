@@ -2,6 +2,26 @@
 
 后端 API 已完成核心功能开发（认证、课程、账单、学生支付账单）。
 
+## 代码规范
+
+- 本项目使用 `laravel/pint`，并通过 `pint.json` 固定为 `PSR-12` 风格。
+- 自动格式化命令：`./vendor/bin/pint`
+
+## 生产环境缓存与错误处理
+
+- 建议上线后执行：
+  - `php artisan config:cache`
+  - `php artisan route:cache`
+  - `php artisan event:cache`
+- 建议环境变量：
+  - `APP_ENV=production`
+  - `APP_DEBUG=false`
+  - `LOG_CHANNEL=daily`
+  - `LOG_LEVEL=warning`
+- 日志查看：
+  - 文件：`storage/logs/laravel.log`
+  - 命令：`tail -f storage/logs/laravel.log`
+
 ## 六、AI 编程能力
 
 本项目在开发过程中使用了 AI 编程助手（Cursor）进行人机协作，主要用于提升开发速度、联调效率和排错质量。
