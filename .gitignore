@@ -10,6 +10,7 @@
 .env.production
 .env.*.local
 .phpunit.result.cache
+.DS_Store
 Homestead.json
 Homestead.yaml
 docker-compose.override.yml
@@ -20,3 +21,4 @@ yarn-error.log
 /.idea
 /.vscode
 /delivery-docs
+/public/debugbar

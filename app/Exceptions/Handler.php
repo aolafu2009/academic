@@ -30,19 +30,18 @@ class Handler extends ExceptionHandler
             Log::error('Unhandled exception captured.', [
                 'message' => $e->getMessage(),
                 'exception' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
             ]);
         });
 
         $this->renderable(function (Throwable $e, Request $request) {
-            if (!$request->expectsJson()) {
+            if (!$request->expectsJson() && !$request->is('api/*')) {
                 return null;
             }
 
             if ($e instanceof HttpExceptionInterface) {
-                return null;
-            }
-
-            if (!app()->isProduction()) {
                 return null;
             }
 

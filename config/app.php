@@ -42,7 +42,8 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    // On Heroku dynos (DYNO exists), always disable debug output to avoid leaking stack traces.
+    'debug' => env('DYNO') ? false : (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
