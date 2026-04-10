@@ -12,12 +12,15 @@ use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
+    private BillService $billService;
+
     /**
      * 通过依赖注入接入账单业务服务层。
      * 控制器仅负责请求编排与响应格式，核心业务由 Service 统一处理。
      */
-    public function __construct(private readonly BillService $billService)
+    public function __construct(BillService $billService)
     {
+        $this->billService = $billService;
     }
 
     /**
@@ -25,12 +28,12 @@ class BillController extends Controller
      */
     public function index(Request $request)
     {
-        // Service 内部会根据用户角色（教师/学生）构建对应可见数据范围。
-        $query = $this->billService->queryByUser($request->user());
+        $result = $this->billService->listByUser($request->user(), $request->only(['per_page']));
 
         return response()->json([
             'code' => 200,
-            'data' => $query->orderByDesc('id')->get(),
+            'data' => $result['data'],
+            'meta' => $result['meta'],
         ]);
     }
 

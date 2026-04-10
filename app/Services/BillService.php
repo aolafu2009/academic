@@ -13,8 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class BillService
 {
-    public function __construct(private readonly PaymentGatewayFactory $gatewayFactory)
+    private PaymentGatewayFactory $gatewayFactory;
+
+    public function __construct(PaymentGatewayFactory $gatewayFactory)
     {
+        $this->gatewayFactory = $gatewayFactory;
     }
 
     public function queryByUser(User $user): Builder
@@ -40,6 +43,25 @@ class BillService
         }
 
         return $query;
+    }
+
+    /**
+     * 账单列表（按用户身份过滤），默认分页 20，最大 100。
+     */
+    public function listByUser(User $user, array $params): array
+    {
+        $perPage = max(1, min((int) ($params['per_page'] ?? 20), 100));
+        $bills = $this->queryByUser($user)->orderByDesc('id')->paginate($perPage);
+
+        return [
+            'data' => $bills->items(),
+            'meta' => [
+                'current_page' => $bills->currentPage(),
+                'per_page' => $bills->perPage(),
+                'total' => $bills->total(),
+                'last_page' => $bills->lastPage(),
+            ],
+        ];
     }
 
     public function createByTeacher(User $user, array $validated): CourseBill
