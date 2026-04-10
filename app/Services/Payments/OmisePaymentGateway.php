@@ -22,9 +22,14 @@ class OmisePaymentGateway implements PaymentGatewayInterface
             throw new ApiBusinessException('未配置 Omise 密钥，请检查 OMISE_SECRET_KEY', 500);
         }
 
-        // Omise 的 amount 使用最小货币单位（如 THB 分）
-        $amount = (float) ($payload['amount'] ?? 0);
-        $smallestUnitAmount = (int) round($amount * 100);
+        // Omise 的 amount 直接使用最小货币单位（如分/satang）
+        // 约束为非负整数字符串或整数，避免将主单位金额误当作最小单位。
+        $amount = $payload['amount'] ?? 0;
+        $smallestUnitAmount = filter_var($amount, FILTER_VALIDATE_INT);
+        if ($smallestUnitAmount === false) {
+            throw new ApiBusinessException('支付金额格式错误，amount 必须是最小货币单位整数', 422);
+        }
+
         if ($smallestUnitAmount <= 0) {
             throw new ApiBusinessException('支付金额必须大于0', 422);
         }

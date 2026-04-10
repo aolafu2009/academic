@@ -130,7 +130,8 @@ class BillService
         $gateway = $this->gatewayFactory->make($provider);
 
         $result = $gateway->charge([
-            'amount' => (float) $bill->amount,
+            // 支付网关要求 amount 为最小货币单位整数（如分/satang）
+            'amount' => (int) $bill->amount,
             'currency' => (string) config('services.omise.currency', 'thb'),
             'omise_token' => $validated['omise_token'] ?? '',
             'description' => 'Bill #'.$bill->id.' payment',
