@@ -18,7 +18,7 @@ class StoreCourseRequest extends FormRequest
         return [
             'course_name' => 'required|string|max:100',
             'course_month' => ['required', 'regex:/^\d{6}$/'],
-            'fee' => 'required|numeric|min:0',
+            'fee' => 'required|numeric|min:1',
             'student_id' => 'required|integer|exists:students,id',
         ];
     }
@@ -32,7 +32,7 @@ class StoreCourseRequest extends FormRequest
             'course_month.regex' => '课程年月日错误',
             'fee.required' => '课程费用不能为空',
             'fee.numeric' => '课程费用必须是数字',
-            'fee.min' => '课程费用不能小于0',
+            'fee.min' => '课程费用不能小于1',
             'student_id.required' => '学生不能为空',
             'student_id.exists' => '学生不存在',
         ];
