@@ -18,7 +18,7 @@ class StoreBillRequest extends FormRequest
         return [
             'course_id' => 'required|integer|exists:courses,id',
             'student_id' => 'required|integer|exists:students,id',
-            'amount' => 'nullable|numeric|min:0',
+            'amount' => 'nullable|numeric|min:1',
         ];
     }
 
@@ -30,7 +30,7 @@ class StoreBillRequest extends FormRequest
             'student_id.required' => '学生不能为空',
             'student_id.exists' => '学生不存在',
             'amount.numeric' => '账单金额必须是数字',
-            'amount.min' => '账单金额不能小于0',
+            'amount.min' => '账单金额不能小于1',
         ];
     }
 
